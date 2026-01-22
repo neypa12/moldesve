@@ -481,285 +481,202 @@
             transform: translateY(-50%) scale(1.1);
         }
         
-        /* Derecha - Información MODIFICADA */
-.popup-right {
-    flex: 1;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    min-width: 300px;
-    height: 70vh;
-    overflow: hidden;
-}
-
-/* Contenido desplazable */
-.popup-content-scrollable {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 10px;
-    margin-right: -10px;
-}
-
-/* Sección fija de WhatsApp */
-.popup-fixed-actions {
-    flex-shrink: 0;
-    padding-top: 20px;
-    margin-top: 20px;
-    border-top: 1px solid #e0f2f2;
-    background-color: white;
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
-}
-
-.popup-product-name {
-    font-size: 22px;
-    color: #0d7377;
-    margin-bottom: 15px;
-    font-weight: 700;
-}
-
-.popup-price {
-    font-size: 18px;
-    color: #0ea5a5;
-    font-weight: 700;
-    margin-bottom: 20px;
-}
-
-.popup-currency {
-    font-size: 16px;
-    color: #0d7377;
-    font-weight: 500;
-}
-
-/* Botones de tamaño */
-.size-options {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.size-title {
-    font-size: 16px;
-    color: #0d7377;
-    font-weight: 600;
-    margin-bottom: 0;
-    white-space: nowrap;
-}
-
-.size-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.size-btn {
-    padding: 6px 12px;
-    background-color: #f0f9f8;
-    border: 2px solid #c2e7e7;
-    border-radius: 6px;
-    color: #0d7377;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 500;
-    font-size: 14px;
-    white-space: nowrap;
-}
-
-.size-btn:hover {
-    background-color: #e0f2f2;
-}
-
-.size-btn.active {
-    background-color: #0ea5a5;
-    color: white;
-    border-color: #0ea5a5;
-}
-
-.characteristics {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #e0f2f2;
-}
-
-.characteristics-title {
-    font-size: 16px;
-    color: #0d7377;
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.characteristics-text {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.5;
-}
-
-/* Barra de desplazamiento solo para el contenido desplazable */
-.popup-content-scrollable::-webkit-scrollbar {
-    width: 6px;
-}
-
-.popup-content-scrollable::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
-}
-
-.popup-content-scrollable::-webkit-scrollbar-thumb {
-    background: #0ea5a5;
-    border-radius: 3px;
-}
-
-.popup-content-scrollable::-webkit-scrollbar-thumb:hover {
-    background: #0d8a8a;
-}
-
-.close-popup {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    color: #0d7377;
-    z-index: 100;
-    transition: all 0.2s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.close-popup:hover {
-    background-color: white;
-    transform: scale(1.1);
-    color: #0ea5a5;
-}
-
-/* ========== POPUP RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .popup-content {
-        flex-direction: column;
-        width: 95%;
-        max-width: 500px;
-        max-height: 85vh;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .popup-left, .popup-right {
-        min-width: auto;
-    }
-    
-    .popup-left {
-        min-height: 250px;
-        flex-shrink: 0;
-        padding: 0;
-    }
-    
-    .popup-image-container {
-        padding-top: 100%; /* Mantener cuadrado */
-    }
-    
-    .popup-right {
-        padding: 20px;
-        max-height: none;
-        overflow-y: visible;
-        display: block;
-        height: auto;
-    }
-    
-    .popup-content-scrollable {
-        overflow-y: visible;
-        margin-right: 0;
-        padding-right: 0;
-        max-height: none;
-    }
-    
-    .popup-fixed-actions {
-        position: static;
-        margin-top: 15px;
-        padding-top: 15px;
-        border-top: 1px solid #e0f2f2;
-    }
-    
-    .popup-product-name {
-        font-size: 20px;
-    }
-    
-    .popup-price {
-        font-size: 18px;
-    }
-    
-    .popup-main-image i {
-        font-size: 60px;
-    }
-    
-    .whatsapp-section {
-        margin-top: 20px;
-    }
-    
-    .whatsapp-btn, .submit-request-btn {
-        padding: 12px;
-        font-size: 15px;
-    }
-    
-    .whatsapp-form {
-        padding: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .popup-content {
-        max-width: 95%;
-        margin: 10px;
-    }
-    
-    .popup-left {
-        min-height: 200px;
-    }
-    
-    .popup-image-container {
-        padding-top: 100%;
-    }
-    
-    .popup-main-image i {
-        font-size: 50px;
-    }
-    
-    .popup-product-name {
-        font-size: 18px;
-    }
-    
-    .popup-price {
-        font-size: 16px;
-    }
-    
-    .size-btn {
-        padding: 5px 10px;
-        font-size: 13px;
-    }
-    
-    .size-title {
-        font-size: 14px;
-    }
-    
-    .whatsapp-btn, .submit-request-btn {
-        font-size: 14px;
-        padding: 10px;
-    }
-    
-    .whatsapp-form {
-        padding: 12px;
-    }
-}
+        /* Derecha - Información */
+        .popup-right {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            min-width: 300px;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+        
+        .popup-product-name {
+            font-size: 22px;
+            color: #0d7377;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .popup-price {
+            font-size: 18px;
+            color: #0ea5a5;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .popup-currency {
+            font-size: 16px;
+            color: #0d7377;
+            font-weight: 500;
+        }
+        
+        /* Botones de tamaño */
+        .size-options {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .size-title {
+            font-size: 16px;
+            color: #0d7377;
+            font-weight: 600;
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+        
+        .size-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .size-btn {
+            padding: 6px 12px;
+            background-color: #f0f9f8;
+            border: 2px solid #c2e7e7;
+            border-radius: 6px;
+            color: #0d7377;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .size-btn:hover {
+            background-color: #e0f2f2;
+        }
+        
+        .size-btn.active {
+            background-color: #0ea5a5;
+            color: white;
+            border-color: #0ea5a5;
+        }
+        
+        .characteristics {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0f2f2;
+        }
+        
+        .characteristics-title {
+            font-size: 16px;
+            color: #0d7377;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .characteristics-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* Barra de desplazamiento */
+        .popup-right::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .popup-right::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .popup-right::-webkit-scrollbar-thumb {
+            background: #0ea5a5;
+            border-radius: 3px;
+        }
+        
+        .popup-right::-webkit-scrollbar-thumb:hover {
+            background: #0d8a8a;
+        }
+        
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #0d7377;
+            z-index: 100;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .close-popup:hover {
+            background-color: white;
+            transform: scale(1.1);
+            color: #0ea5a5;
+        }
+        
+        /* ========== POPUP RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .popup-content {
+                flex-direction: column;
+                width: 95%;
+                max-width: 500px;
+                max-height: 85vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .popup-left, .popup-right {
+                min-width: auto;
+            }
+            
+            .popup-left {
+                min-height: 250px;
+                flex-shrink: 0;
+                padding: 0;
+            }
+            
+            .popup-image-container {
+                padding-top: 100%; /* Mantener cuadrado */
+            }
+            
+            .popup-right {
+                padding: 20px;
+                max-height: none;
+                overflow-y: visible;
+            }
+            
+            .popup-product-name {
+                font-size: 20px;
+            }
+            
+            .popup-price {
+                font-size: 18px;
+            }
+            
+            .popup-main-image i {
+                font-size: 60px;
+            }
+            
+            .whatsapp-section {
+                margin-top: 20px;
+            }
+            
+            .whatsapp-btn, .submit-request-btn {
+                padding: 12px;
+                font-size: 15px;
+            }
+            
+            .whatsapp-form {
+                padding: 15px;
+            }
+        }
         
         @media (max-width: 480px) {
             .popup-content {
@@ -1105,7 +1022,7 @@
         <p id="footerText">© 2023 moldes.ve - Todos los derechos reservados</p>
     </footer>
     
-    <!-- POPUP DE PRODUCTO MODIFICADO -->
+    <!-- POPUP DE PRODUCTO -->
     <div class="popup-overlay" id="productPopup">
         <div class="popup-content">
             <button class="close-popup" id="closePopup">
@@ -1129,8 +1046,7 @@
             </div>
             
             <div class="popup-right">
-                <!-- CONTENIDO DESPLAZABLE -->
-                <div class="popup-content-scrollable" id="popupScrollableContent">
+                <div>
                     <h2 class="popup-product-name" id="popupProductName">Cargando...</h2>
                     
                     <div class="popup-price">
@@ -1152,10 +1068,8 @@
                             Cargando características...
                         </p>
                     </div>
-                </div>
-                
-                <!-- SECCIÓN FIJA: WHATSAPP -->
-                <div class="popup-fixed-actions">
+
+                    <!-- SECCIÓN: FORMULARIO DE WHATSAPP -->
                     <div class="whatsapp-section">
                         <button class="whatsapp-btn" id="whatsappBtn">
                             <i class="fab fa-whatsapp"></i> Pedir fabricación por WhatsApp
@@ -1206,6 +1120,7 @@
             </div>
         </div>
     </div>
+    
     <script>
         // ===================== CONFIGURACIÓN GOOGLE SHEETS =====================
         // ¡REEMPLAZA ESTOS VALORES!
@@ -1767,39 +1682,50 @@
             document.body.style.overflow = 'auto';
         }
 
-       // ===================== WHATSAPP FUNCTIONALITY MEJORADO =====================
-
-whatsappBtn.addEventListener('click', function() {
-    const isOpening = !whatsappForm.classList.contains('active');
-    whatsappForm.classList.toggle('active');
-    
-    if (whatsappForm.classList.contains('active')) {
-        fabricationNotice.classList.add('active');
-        whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Ocultar formulario';
+        // ===================== WHATSAPP FUNCTIONALITY MEJORADO =====================
         
-        // SOLO EN MÓVIL HACEMOS SCROLL (EN DESKTOP EL BOTÓN ES FIJO)
-        setTimeout(() => {
-            const isMobile = window.innerWidth <= 768;
+        whatsappBtn.addEventListener('click', function() {
+            const isOpening = !whatsappForm.classList.contains('active');
+            whatsappForm.classList.toggle('active');
             
-            if (isMobile) {
-                // EN MÓVIL: El popup-content tiene scroll completo
-                const popupContent = document.querySelector('.popup-content');
-                const noticeRect = fabricationNotice.getBoundingClientRect();
-                const popupRect = popupContent.getBoundingClientRect();
+            if (whatsappForm.classList.contains('active')) {
+                fabricationNotice.classList.add('active');
+                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Ocultar formulario';
                 
-                // Calcular posición relativa dentro del popup
-                const relativeTop = noticeRect.top - popupRect.top;
-                
-                // Desplazar solo lo necesario
-                popupContent.scrollTop = relativeTop - 30; // 30px de margen
+                // DESPLAZAMIENTO MEJORADO PARA MÓVIL Y DESKTOP
+                setTimeout(() => {
+                    if (fabricationNotice) {
+                        const isMobile = window.innerWidth <= 768;
+                        
+                        if (isMobile) {
+                            // EN MÓVIL: El popup-content tiene scroll completo
+                            const popupContent = document.querySelector('.popup-content');
+                            const popupRect = popupContent.getBoundingClientRect();
+                            const noticeRect = fabricationNotice.getBoundingClientRect();
+                            
+                            // Calcular posición relativa dentro del popup
+                            const relativeTop = noticeRect.top - popupRect.top;
+                            
+                            // Desplazar solo lo necesario
+                            popupContent.scrollTop = relativeTop - 30; // 30px de margen
+                        } else {
+                            // EN DESKTOP: Solo popup-right tiene scroll
+                            const popupRight = document.querySelector('.popup-right');
+                            if (popupRight) {
+                                const noticeTop = fabricationNotice.offsetTop;
+                                popupRight.scrollTo({
+                                    top: noticeTop - 20,
+                                    behavior: 'smooth'
+                                });
+                            }
+                        }
+                    }
+                }, 150);
+            } else {
+                fabricationNotice.classList.remove('active');
+                whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir fabricación por WhatsApp';
             }
-            // EN DESKTOP: NO hacemos scroll - el formulario ya es visible en la sección fija
-        }, 150);
-    } else {
-        fabricationNotice.classList.remove('active');
-        whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir fabricación por WhatsApp';
-    }
-});
+        });
 
         submitRequestBtn.addEventListener('click', function() {
             // Validar campos
@@ -1881,4 +1807,5 @@ whatsappBtn.addEventListener('click', function() {
     </script>
 </body>
 </html>
+
 
