@@ -1131,7 +1131,7 @@
         // URLs de las hojas usando la API de Google Sheets
         const CONFIG_SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Configuración!A:B?key=${GOOGLE_API_KEY}`;
         const CATEGORIES_SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Categorías!A:B?key=${GOOGLE_API_KEY}`;
-        const PRODUCTS_SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Productos!A:H?key=${GOOGLE_API_KEY}`;
+        const PRODUCTS_SHEET_URL = `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEET_ID}/values/Productos!A:I?key=${GOOGLE_API_KEY}`;
         
         // ===================== VARIABLES GLOBALES =====================
         let productsData = {};
@@ -1316,65 +1316,83 @@
             setupCategoryListeners();
         }
 
-        // Cargar productos
-        async function loadProducts() {
-            try {
-                const response = await fetch(PRODUCTS_SHEET_URL);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+       // Cargar productos
+async function loadProducts() {
+    try {
+        const response = await fetch(PRODUCTS_SHEET_URL);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const data = await response.json();
+        const rows = data.values || [];
+        
+        // Saltar la primera fila (encabezados)
+        const productRows = rows.slice(1);
+        
+        // Convertir array a objeto con id como clave
+        productsData = {};
+        productRows.forEach(row => {
+            if (row[0] && row[1]) {
+                const id = parseInt(row[0].trim());
+                const activo = row[7] ? row[7].trim().toUpperCase() : 'TRUE';
                 
-                const data = await response.json();
-                const rows = data.values || [];
-                
-                // Saltar la primera fila (encabezados)
-                const productRows = rows.slice(1);
-                
-                // Convertir array a objeto con id como clave
-                productsData = {};
-                productRows.forEach(row => {
-                    if (row[0] && row[1]) {
-                        const id = parseInt(row[0].trim());
-                        const activo = row[7] ? row[7].trim().toUpperCase() : 'TRUE';
+                if (activo === 'TRUE' || activo === 'SI' || activo === 'SÍ' || activo === '1') {
+                    // Procesar imágenes
+                    let images = [];
+                    if (row[5]) {
+                        images = row[5].split(',').map(img => img.trim());
+                    } else {
+                        images = ['fas fa-box'];
+                    }
+                    
+                    // Procesar tamaños y precios (columna I)
+                    let sizePrices = {};
+                    if (row[8]) {
+                        // Formato: "8cm:12.99,10cm:15.99"
+                        const sizePricePairs = row[8].split(',');
+                        sizePricePairs.forEach(pair => {
+                            const [size, price] = pair.split(':');
+                            if (size && price) {
+                                sizePrices[size.trim()] = parseFloat(price.trim());
+                            }
+                        });
+                    }
+                    
+                    // Si no hay tamaños definidos, usar el sistema antiguo
+                    if (Object.keys(sizePrices).length === 0) {
+                        sizePrices = {
+                            "8cm": parseFloat(row[2]) || 0,
+                            "10cm": (parseFloat(row[2]) || 0) + 3.00
+                        };
                         
-                        if (activo === 'TRUE' || activo === 'SI' || activo === 'SÍ' || activo === '1') {
-                            // Procesar imágenes
-                            let images = [];
-                            if (row[5]) {
-                                images = row[5].split(',').map(img => img.trim());
-                            } else {
-                                images = ['fas fa-box'];
-                            }
-                            
-                            productsData[id] = {
-                                name: row[1].trim() || 'Sin nombre',
-                                basePrice: parseFloat(row[2]) || 0,
-                                offerPrice: row[3] ? parseFloat(row[3]) : null,
-                                characteristics: row[4] || 'Sin características',
-                                images: images,
-                                categories: row[6] ? row[6].split(',').map(cat => cat.trim()) : [],
-                                sizePrices: {
-                                    "8cm": parseFloat(row[2]) || 0,
-                                    "10cm": (parseFloat(row[2]) || 0) + 3.00
-                                }
-                            };
-                            
-                            // Si hay oferta, aplicarla al tamaño 8cm
-                            if (productsData[id].offerPrice) {
-                                productsData[id].sizePrices["8cm"] = productsData[id].offerPrice;
-                            }
+                        // Si hay oferta, aplicarla al tamaño 8cm
+                        if (row[3]) {
+                            sizePrices["8cm"] = parseFloat(row[3]);
                         }
                     }
-                });
-                
-                console.log('Productos cargados:', productsData);
-                
-                // Renderizar productos
-                renderProducts();
-                
-            } catch (error) {
-                console.error('Error cargando productos:', error);
-                loadDefaultProducts();
+                    
+                    productsData[id] = {
+                        name: row[1].trim() || 'Sin nombre',
+                        basePrice: parseFloat(row[2]) || 0,
+                        offerPrice: row[3] ? parseFloat(row[3]) : null,
+                        characteristics: row[4] || 'Sin características',
+                        images: images,
+                        categories: row[6] ? row[6].split(',').map(cat => cat.trim()) : [],
+                        sizePrices: sizePrices
+                    };
+                }
             }
-        }
+        });
+        
+        console.log('Productos cargados:', productsData);
+        
+        // Renderizar productos
+        renderProducts();
+        
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+        loadDefaultProducts();
+    }
+}
 
         // Productos por defecto
         function loadDefaultProducts() {
@@ -1429,12 +1447,14 @@
                 productCard.setAttribute('data-product', productId);
                 
                 // Determinar precio a mostrar (oferta o normal)
-                let displayPrice = product.basePrice;
-                let hasOffer = false;
+                const prices = Object.values(product.sizePrices);
+let displayPrice = prices.length > 0 ? Math.min(...prices) : product.basePrice;
+let hasOffer = false;
                 
-                if (product.offerPrice && product.offerPrice < product.basePrice) {
-                    displayPrice = product.offerPrice;
-                    hasOffer = true;
+               // Verificar si hay oferta (si el precio más bajo es menor que el precio base)
+if (product.offerPrice && product.offerPrice < product.basePrice) {
+    hasOffer = true;
+    displayPrice = product.offerPrice;
                 }
                 
                 // Crear HTML de la tarjeta
@@ -1551,48 +1571,56 @@
         // ===================== FUNCIONALIDAD DEL POPUP =====================
         
         // Abrir popup
-        function openProductPopup(productId) {
-            currentProductId = productId;
-            currentImageIndex = 0;
-            selectedSize = "8cm";
-            
-            const product = productsData[productId];
-            if (!product) return;
-            
-            // Actualizar información
-            popupProductName.textContent = product.name;
-            popupCharacteristics.textContent = product.characteristics;
-            
-            // Cargar primera imagen
-            updatePopupImage();
-            
-            // Actualizar botones de tamaño
-            updateSizeButtons(product.sizePrices);
-            
-            // Actualizar precio
-            updatePrice();
-            
-            // Restablecer botones
-            if (sizeOptionsContainer.querySelector('[data-size="8cm"]')) {
-                sizeOptionsContainer.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
-                sizeOptionsContainer.querySelector('[data-size="8cm"]').classList.add('active');
-            }
-            
-            // Ocultar formulario WhatsApp
-            whatsappForm.classList.remove('active');
-            fabricationNotice.classList.remove('active');
-            whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir fabricación por WhatsApp';
-            
-            // Limpiar formulario
-            clientNameInput.value = '';
-            clientLastNameInput.value = '';
-            clientPhoneInput.value = '';
-            clientCityInput.value = '';
-            
-            // Mostrar popup
-            productPopup.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+function openProductPopup(productId) {
+    currentProductId = productId;
+    currentImageIndex = 0;
+    
+    const product = productsData[productId];
+    if (!product) return;
+    
+    // Obtener el primer tamaño disponible
+    const sizes = Object.keys(product.sizePrices);
+    if (sizes.length > 0) {
+        selectedSize = sizes[0];
+    } else {
+        selectedSize = "8cm";
+    }
+    
+    // Actualizar información
+    popupProductName.textContent = product.name;
+    popupCharacteristics.textContent = product.characteristics;
+    
+    // Cargar primera imagen
+    updatePopupImage();
+    
+    // Actualizar botones de tamaño
+    updateSizeButtons(product.sizePrices);
+    
+    // Actualizar precio
+    updatePrice();
+    
+    // Restablecer botones - activar el primero
+    const sizeButtons = sizeOptionsContainer.querySelectorAll('.size-btn');
+    if (sizeButtons.length > 0) {
+        sizeButtons.forEach(btn => btn.classList.remove('active'));
+        sizeButtons[0].classList.add('active');
+    }
+    
+    // Resto del código sigue igual...
+    whatsappForm.classList.remove('active');
+    fabricationNotice.classList.remove('active');
+    whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir fabricación por WhatsApp';
+    
+    // Limpiar formulario
+    clientNameInput.value = '';
+    clientLastNameInput.value = '';
+    clientPhoneInput.value = '';
+    clientCityInput.value = '';
+    
+    // Mostrar popup
+    productPopup.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
 
         // Actualizar imagen del popup
         function updatePopupImage() {
@@ -1636,27 +1664,27 @@
             updatePopupImage();
         });
 
-        // Actualizar botones de tamaño
-        function updateSizeButtons(sizePrices) {
-            sizeOptionsContainer.innerHTML = '';
-            
-            Object.keys(sizePrices).forEach(size => {
-                const button = document.createElement('button');
-                button.className = 'size-btn';
-                if (size === selectedSize) button.classList.add('active');
-                button.setAttribute('data-size', size);
-                button.setAttribute('data-price', sizePrices[size]);
-                button.textContent = size;
-                sizeOptionsContainer.appendChild(button);
-                
-                button.addEventListener('click', function() {
-                    sizeOptionsContainer.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    selectedSize = this.getAttribute('data-size');
-                    updatePrice();
-                });
-            });
-        }
+       // Actualizar botones de tamaño
+function updateSizeButtons(sizePrices) {
+    sizeOptionsContainer.innerHTML = '';
+    
+    Object.keys(sizePrices).forEach(size => {
+        const button = document.createElement('button');
+        button.className = 'size-btn';
+        if (size === selectedSize) button.classList.add('active');
+        button.setAttribute('data-size', size);
+        button.setAttribute('data-price', sizePrices[size]);
+        button.textContent = size;
+        sizeOptionsContainer.appendChild(button);
+        
+        button.addEventListener('click', function() {
+            sizeOptionsContainer.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            selectedSize = this.getAttribute('data-size');
+            updatePrice();
+        });
+    });
+}
 
         // Actualizar precio
         function updatePrice() {
