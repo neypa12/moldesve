@@ -1681,18 +1681,21 @@ footer {
         fabricationNotice.classList.add('active');
         whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Ocultar formulario';
         
+        // DESPLAZAMIENTO CORREGIDO
         setTimeout(() => {
             if (fabricationNotice) {
+                // Desplazar dentro del contenedor del popup
                 const popupRight = document.querySelector('.popup-right');
                 if (popupRight) {
                     const noticeTop = fabricationNotice.offsetTop;
+                    // Desplazar suavemente con margen
                     popupRight.scrollTo({
-                        top: noticeTop - 20, // 20px de margen superior
+                        top: noticeTop - 30, // 30px de margen
                         behavior: 'smooth'
                     });
                 }
             }
-        }, 100);
+        }, 120); // Pequeño delay para que la animación del formulario termine
     } else {
         fabricationNotice.classList.remove('active');
         whatsappBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Pedir fabricación por WhatsApp';
