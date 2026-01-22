@@ -557,25 +557,23 @@
             border-color: #0ea5a5;
         }
         
-       /* Cambiar de .characteristics a .description */
-.description {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #e0f2f2;
-}
-
-.description-title {
-    font-size: 16px;
-    color: #0d7377;
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.description-text {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.5;
-}
+        .characteristics {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0f2f2;
+        }
+        
+        .characteristics-title {
+            font-size: 16px;
+            color: #0d7377;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .characteristics-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
         }
         
         /* Barra de desplazamiento */
@@ -1064,11 +1062,11 @@
                         </div>
                     </div>
                     
-                 <div class="description">
-                    <h3 class="description-title">Descripción:</h3>
-                      <p class="description-text" id="popupDescription">
-                    Cargando descripción...
-                     </p>
+                    <div class="characteristics">
+                        <h3 class="characteristics-title">Características:</h3>
+                        <p class="characteristics-text" id="popupCharacteristics">
+                            Cargando características...
+                        </p>
                     </div>
 
                     <!-- SECCIÓN: FORMULARIO DE WHATSAPP -->
@@ -1151,7 +1149,7 @@
         const popupMainImage = document.getElementById('popupMainImage');
         const popupProductName = document.getElementById('popupProductName');
         const popupPriceValue = document.getElementById('popupPriceValue');
-        const popupDescription = document.getElementById('popupDescription');
+        const popupCharacteristics = document.getElementById('popupCharacteristics');
         const sizeOptionsContainer = document.getElementById('sizeOptions');
         const nextImageBtn = document.getElementById('nextImageBtn');
         const profileImage = document.getElementById('profileImage');
@@ -1349,7 +1347,7 @@
                                 name: row[1].trim() || 'Sin nombre',
                                 basePrice: parseFloat(row[2]) || 0,
                                 offerPrice: row[3] ? parseFloat(row[3]) : null,
-                                characteristics: row[4] || 'Sin descripción',
+                                characteristics: row[4] || 'Sin características',
                                 images: images,
                                 categories: row[6] ? row[6].split(',').map(cat => cat.trim()) : [],
                                 sizePrices: {
@@ -1384,7 +1382,7 @@
                     name: "Molde Galletas Estrella",
                     basePrice: 12.99,
                     offerPrice: null,
-                    description: "Molde de silicona de 8cm, sirve para velas, resina y jabones, tiene un grosor de 5.5mm y es fabricado por nosotros.",
+                    characteristics: "Molde de silicona de 8cm, sirve para velas, resina y jabones, tiene un grosor de 5.5mm y es fabricado por nosotros.",
                     images: ["fas fa-cookie-bite", "fas fa-star", "fas fa-cookie"],
                     categories: ["1", "2"],
                     sizePrices: {
@@ -1396,7 +1394,7 @@
                     name: "Molde de Corazones",
                     basePrice: 15.00,
                     offerPrice: null,
-                    description: "Molde de silicona de 8cm, sirve para velas, resina y jabones, tiene un grosor de 5.5mm y es fabricado por nosotros.",
+                    characteristics: "Molde de silicona de 8cm, sirve para velas, resina y jabones, tiene un grosor de 5.5mm y es fabricado por nosotros.",
                     images: ["fas fa-heart", "fas fa-heartbeat", "fas fa-heart-broken"],
                     categories: ["2", "3"],
                     sizePrices: {
@@ -1562,7 +1560,7 @@
             
             // Actualizar información
             popupProductName.textContent = product.name;
-            popupDescription.textContent = product.description;
+            popupCharacteristics.textContent = product.characteristics;
             
             // Cargar primera imagen
             updatePopupImage();
